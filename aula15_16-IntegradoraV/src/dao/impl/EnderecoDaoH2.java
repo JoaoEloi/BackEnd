@@ -1,7 +1,7 @@
 package dao.impl;
 
+import dao.IDao;
 import dao.config.ConfigJDBC;
-import dao.iDao;
 import model.Endereco;
 
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class EnderecoDaoH2 implements iDao<Endereco> {
+public class EnderecoDaoH2 implements IDao<Endereco> {
 
     private ConfigJDBC configJDBC;
 
@@ -22,10 +22,9 @@ public class EnderecoDaoH2 implements iDao<Endereco> {
 
         Connection connection = configJDBC.conectarComBancoDeDados();
         Statement stmt = null;
-
         String query = String.format(
-                "INSERT INTO enderecos" +
-                "(rua, numero, cidade, bairro)" +
+                "INSERT INTO enderecos " +
+                "(rua, numero, cidade, bairro) " +
                 "VALUES ('%s', '%s', '%s', '%s')",
                 endereco.getRua(),
                 endereco.getNumero(),
@@ -33,21 +32,19 @@ public class EnderecoDaoH2 implements iDao<Endereco> {
                 endereco.getBairro()
         );
 
-        try{
+        try {
             stmt = connection.createStatement();
             stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet keys = stmt.getGeneratedKeys();
-            if (keys.next()){
+            if(keys.next())
                 endereco.setId(keys.getInt(1));
-                stmt.close();
-                connection.close();
-            }
-
-        } catch(SQLException e) {
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
             e.printStackTrace();
-
         }
 
-        return null;
+        return endereco;
     }
+
 }

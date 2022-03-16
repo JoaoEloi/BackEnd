@@ -2,35 +2,37 @@ package dao.impl;
 
 import dao.config.ConfigJDBC;
 import dao.iDao;
-import model.Endereco;
+import model.Hotel;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class EnderecoDaoH2 implements iDao<Endereco> {
+public class HotelDaoH2 implements iDao<Hotel> {
 
     private ConfigJDBC configJDBC;
 
-    public EnderecoDaoH2(ConfigJDBC configJDBC) {
+    public HotelDaoH2(ConfigJDBC configJDBC) {
         this.configJDBC = configJDBC;
     }
 
     @Override
-    public Endereco salvar(Endereco endereco) {
+    public Hotel salvar(Hotel hotel) {
 
         Connection connection = configJDBC.conectarComBancoDeDados();
         Statement stmt = null;
 
         String query = String.format(
-                "INSERT INTO enderecos" +
-                "(rua, numero, cidade, bairro)" +
-                "VALUES ('%s', '%s', '%s', '%s')",
-                endereco.getRua(),
-                endereco.getNumero(),
-                endereco.getCidade(),
-                endereco.getBairro()
+                "INSERT INTO filiais" +
+                        "(nomeFilial,rua, numero, cidade, estado)" +
+                        "VALUES ('%s', '%s', '%s', '%s', '%s')",
+                hotel.getRua(),
+                hotel.getNumero(),
+                hotel.getCidade(),
+                hotel.getNomeFilial(),
+                hotel.getEstado(),
+                hotel.getId()
         );
 
         try{
@@ -38,7 +40,7 @@ public class EnderecoDaoH2 implements iDao<Endereco> {
             stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet keys = stmt.getGeneratedKeys();
             if (keys.next()){
-                endereco.setId(keys.getInt(1));
+                hotel.setId(keys.getInt(1));
                 stmt.close();
                 connection.close();
             }
@@ -50,4 +52,5 @@ public class EnderecoDaoH2 implements iDao<Endereco> {
 
         return null;
     }
+
 }
