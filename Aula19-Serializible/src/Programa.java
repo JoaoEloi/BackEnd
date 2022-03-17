@@ -17,7 +17,7 @@ public class Programa {
         c1.setIdade(3);
         c1.setEndereco("Av. Duque de Caxias,12345");
 
-        //Usando o construtor parametrizado
+
         Cachorro c2 = new Cachorro("Bento", "Beagle", 4, "Casa da Mãe Joana");
 
         //Adicionando na lista
